@@ -1,0 +1,17 @@
+D:\AOC\AOC-2024\Day1\bin\Debug\net8.0\Day1.exe
+D:\AOC\AOC-2024\Day1\bin\Debug\net8.0\Day1.deps.json
+D:\AOC\AOC-2024\Day1\bin\Debug\net8.0\Day1.runtimeconfig.json
+D:\AOC\AOC-2024\Day1\bin\Debug\net8.0\Day1.dll
+D:\AOC\AOC-2024\Day1\bin\Debug\net8.0\Day1.pdb
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.GeneratedMSBuildEditorConfig.editorconfig
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.AssemblyInfoInputs.cache
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.AssemblyInfo.cs
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.csproj.CoreCompileInputs.cache
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.sourcelink.json
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.dll
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\refint\Day1.dll
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.pdb
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\Day1.genruntimeconfig.cache
+D:\AOC\AOC-2024\Day1\obj\Debug\net8.0\ref\Day1.dll
+D:\AOC\AOC-2024\Day1\bin\Debug\net8.0\sample.txt
+D:\AOC\AOC-2024\Day1\bin\Debug\net8.0\input.txt
