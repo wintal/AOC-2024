@@ -1,0 +1,56 @@
+# Default for Visual Studio
+*.suo
+*.user
+*.vs
+*.pdb
+
+# NuGet
+*.nupkg
+!/lib/**/*.nupkg
+**/packages
+
+# Visual C++ cache files
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio cache files
+*.dbmdl
+*.jfm
+
+# Build output
+artifacts
+[Oo]bj
+[Bb]in
+[Dd]ebug
+[Dd]ebug64
+[Rr]elease
+[Rr]elease64
+[Ll]ibs
+
+# Test output
+*.trx
+
+# License files
+licenses.licx
+
+# Git merge artifiacts
+*.orig
+
+# Python virtual environment
+virtual_env
+
+# ANTLR artifacts
+src/**/gen/
+
+# Mesh stuff
+MeshDll.h
+history.txt
+
+# Ranorex files
+RanorexPlugin.sln.pref
+
+# SonarQube stuff
+sonarlint.xml
+.sonarqube
+coverage.xml
+*.coverage

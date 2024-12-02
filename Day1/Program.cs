@@ -16,7 +16,6 @@ class Program
     static void RunPart1(string inputFile)
     {
         int result = 0;
-        int max = 0;
         
         var lines = System.IO.File.ReadAllLines(inputFile);
         if (!lines.Any())
@@ -26,28 +25,31 @@ class Program
 
         int current = 0;
 
+        List<int> a = new();
+        List<int> b = new();
         foreach (var line in lines)
         {
-            if (string.IsNullOrEmpty(line))
-            {
-                max = Math.Max(current, max);
-                current = 0;
-                continue;
-            }
-            current += Int32.Parse(line);
+            var parts = line.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+           a.Add(int.Parse(parts[0]));
+           b.Add(int.Parse(parts[1]));
             
         }
-        max = Math.Max(max, current);
-        
-        System.Console.WriteLine($"Result {inputFile} is {max}");
+
+        a.Sort();
+        b.Sort();
+        int diff = 0;
+        for (int i = 0; i < a.Count; i++)
+        {
+            diff += Math.Abs(a[i] - b[i]);
+        }
+            
+        System.Console.WriteLine($"Result {inputFile} is {diff}");
     }
 
     static void RunPart2(string inputFile)
     {
         int result = 0;
-        int max = 0;
-
-        List<int> allValues = new List<int>();
+        
         var lines = System.IO.File.ReadAllLines(inputFile);
         if (!lines.Any())
         {
@@ -56,22 +58,24 @@ class Program
 
         int current = 0;
 
+        List<int> a = new();
+        List<int> b = new();
         foreach (var line in lines)
         {
-            if (string.IsNullOrEmpty(line))
-            {
-                allValues.Add(current);
-                current = 0;
-                continue;
-            }
-            current += Int32.Parse(line);
+            var parts = line.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            a.Add(int.Parse(parts[0]));
+            b.Add(int.Parse(parts[1]));
             
         }
-        allValues.Add(current);
-        allValues.Sort();
-        var length = allValues.Count;
-        var total = allValues[length - 1] + allValues[length -2 ] + allValues[length - 3];
-        
-        System.Console.WriteLine($"Result {inputFile} is {total}");
+
+        a.Sort();
+        b.Sort();
+        int diff = 0;
+        for (int i = 0; i < a.Count; i++)
+        {
+            diff += a[i] * b.Where(elem => elem == a[i]).Count();
+        }
+            
+        System.Console.WriteLine($"Result {inputFile} is {diff}");
     }
 }
