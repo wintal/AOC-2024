@@ -31,51 +31,12 @@ class Program
         {
             for (int i = 0; i < line.Length - 8; i++)
             {
-                if (line[i..(i + 4)] == "mul(")
+                var match = Regex.Match(line[i..], "^mul\\((\\d{1,3}),(\\d{1,3})\\)");
+                if (match.Success)
                 {
-                    int offset = 4;
-                    int firstNumber = 0;
-                    for (int num = 0; num < 3; num++)
-                    {
-                        if (char.IsNumber(line[i + offset]))
-                        {
-                            firstNumber = firstNumber * 10 + (line[i + offset]) - '0';
-                            offset++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    if (line[i + offset] != ',' || firstNumber == 0)
-                    {
-                        continue;
-                    }
-
-                    offset++;
-                    int secondNumber = 0;
-                    for (int num = 0; num < 3; num++)
-                    {
-                        if (char.IsNumber(line[i + offset]))
-                        {
-                            secondNumber = secondNumber * 10 + (line[i + offset]) - '0';
-
-                            offset++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    if (line[i + offset] != ')' || secondNumber == 0)
-                    {
-                        continue;
-                    }
-
-                    result += firstNumber * secondNumber;
-                    i += offset;
+                    int first = int.Parse(match.Groups[1].Value);
+                    int second = int.Parse(match.Groups[2].Value);
+                    result += first * second;
                 }
             }
         }
@@ -96,9 +57,6 @@ class Program
         bool doIt = true;
         foreach (var line in lines)
         {
-            var matchDO = line[1..3] == "do()";
-
-
             for (int i = 0; i < line.Length - 7; i++)
             {
                 if (line[i..].StartsWith("do()"))
@@ -109,55 +67,18 @@ class Program
                 {
                     doIt = false;
                 }
-                else if (line[i..].StartsWith("mul("))
+                else 
                 {
-                    int offset = 4;
-                    int firstNumber = 0;
-                    for (int num = 0; num < 3; num++)
+                    var match = Regex.Match(line[i..], "^mul\\((\\d{1,3}),(\\d{1,3})\\)");
+                    if (match.Success)
                     {
-                        if (char.IsNumber(line[i + offset]))
+                        if (doIt)
                         {
-                            firstNumber = firstNumber * 10 + (line[i + offset]) - '0';
-                            offset++;
-                        }
-                        else
-                        {
-                            break;
+                            int first = int.Parse(match.Groups[1].Value);
+                            int second = int.Parse(match.Groups[2].Value);
+                            result += first * second;
                         }
                     }
-
-                    if (line[i + offset] != ',' || firstNumber == 0)
-                    {
-                        continue;
-                    }
-
-                    offset++;
-                    int secondNumber = 0;
-                    for (int num = 0; num < 3; num++)
-                    {
-                        if (char.IsNumber(line[i + offset]))
-                        {
-                            secondNumber = secondNumber * 10 + (line[i + offset]) - '0';
-
-                            offset++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    if (line[i + offset] != ')' || secondNumber == 0)
-                    {
-                        continue;
-                    }
-
-                    if (doIt)
-                    {
-                        result += firstNumber * secondNumber;
-                    }
-
-                    i += offset;
                 }
             }
         }
