@@ -26,7 +26,6 @@ class Program
 
         int result = 0;
 
-        bool doIt = true;
         foreach (var line in lines)
         {
             for (int i = 0; i < line.Length - 8; i++)
