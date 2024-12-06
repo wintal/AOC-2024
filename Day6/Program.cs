@@ -19,7 +19,12 @@ class Program
         
         var lines = System.IO.File.ReadAllLines(inputFile);
         result = lines.Length;
-        
+
+        foreach (var line in lines)
+        {
+            var parts = line.Split("|", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        }
+
         System.Console.WriteLine($"Result {inputFile} is {result}");
     }
 
