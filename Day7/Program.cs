@@ -1,4 +1,6 @@
-﻿namespace Day1;
+﻿using Utilities;
+
+namespace Day7;
 
 
 class Program
@@ -16,10 +18,13 @@ class Program
     static void RunPart1(string inputFile)
     {
         int result = 0;
-        
+
         var lines = System.IO.File.ReadAllLines(inputFile);
-        result = lines.Length;
-        
+  
+        Map map = Map.LoadFromLines(lines);
+        Vector start = map.FindEntry('^');
+        map[start] = '.';
+
         System.Console.WriteLine($"Result {inputFile} is {result}");
     }
 
