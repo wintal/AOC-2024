@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{3EE2A996-E1B5-419E-B24D-9C4125CFCEA2}"
 	ProjectSection(SolutionItems) = preProject
 		FetchContent.ps1 = FetchContent.ps1
+		FetchLoaderBoard.ps1 = FetchLoaderBoard.ps1
+		Leaderboard.json = Leaderboard.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day1", "Day1\Day1.csproj", "{07A7AFA4-7770-486C-8911-AE9AB373FA83}"
@@ -54,6 +56,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day24", "Day24\Day24.csproj", "{E2E7BA56-F082-47EE-8A59-40C857E10C3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day25", "Day25\Day25.csproj", "{C9DB79D4-4D80-4024-AE49-CCDFE076792F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaderboardProcessor", "LeaderboardProcessor\LeaderboardProcessor.csproj", "{A4F40A06-2BFD-498F-90AC-BEE8884BC160}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{40845DB2-F4C8-4415-A4AF-15FDE59F9C14}"
 EndProject
 
 Global
@@ -162,5 +168,13 @@ Global
 		{C9DB79D4-4D80-4024-AE49-CCDFE076792F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9DB79D4-4D80-4024-AE49-CCDFE076792F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9DB79D4-4D80-4024-AE49-CCDFE076792F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4F40A06-2BFD-498F-90AC-BEE8884BC160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4F40A06-2BFD-498F-90AC-BEE8884BC160}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4F40A06-2BFD-498F-90AC-BEE8884BC160}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4F40A06-2BFD-498F-90AC-BEE8884BC160}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40845DB2-F4C8-4415-A4AF-15FDE59F9C14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40845DB2-F4C8-4415-A4AF-15FDE59F9C14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40845DB2-F4C8-4415-A4AF-15FDE59F9C14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40845DB2-F4C8-4415-A4AF-15FDE59F9C14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

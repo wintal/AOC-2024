@@ -1,4 +1,6 @@
-﻿namespace Day1;
+﻿using Utilities;
+
+namespace Day1;
 
 
 class Program
@@ -15,10 +17,19 @@ class Program
 
     static void RunPart1(string inputFile)
     {
-        int result = 0;
-        
+        long result = 0;
+
         var lines = System.IO.File.ReadAllLines(inputFile);
-        result = lines.Length;
+
+        var map = Map.LoadFromLines(lines);
+
+        Dictionary<char, List<Vector>> locations = new Dictionary<char, List<Vector>>();
+        map.Print();
+
+        foreach (var line in lines)
+        {
+            var entries = line.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        }   
         
         System.Console.WriteLine($"Result {inputFile} is {result}");
     }
