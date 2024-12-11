@@ -13,12 +13,17 @@ class Program
             dayToReport = dayId;
         }
 
+        Dictionary<string, int> mattStars = new Dictionary<string, int>();
+        Dictionary<string, int> actualStars = new Dictionary<string, int>();
+
+        int numberPeople = data.members.Count;
         for (int day = 1; day <= 25; day++)
         {
             if (dayToReport.HasValue && dayToReport.Value != day) continue;
             
             List<(string Name, DateTime Time)> leaderboardA = new List<(string Name, DateTime Time)>();
             List<(string Name, DateTime Time)> leaderboardB = new List<(string Name, DateTime Time)>();
+            List<(string Name, long Time)> leaderboardDelta = new List<(string Name, long Time)>();
 
             foreach (var member in data.members.Select(kvp => kvp.Value))
             {
@@ -28,45 +33,82 @@ class Program
                     if (dayResult?.TryGetValue(1, out var partResult) ?? false)
                     {
                         leaderboardA.Add((member.name, UnixTimeStampToDateTime(partResult.get_star_ts)));
-                    }
-                    
-                    if (dayResult?.TryGetValue(2, out var partResult2) ?? false)
-                    {
-                        leaderboardB.Add((member.name, UnixTimeStampToDateTime(partResult2.get_star_ts)));
+                        if (!actualStars.ContainsKey(member.name))
+                        {
+                            actualStars.Add(member.name, 0);
+                        }
+
+                        if (dayResult?.TryGetValue(2, out var partResult2) ?? false)
+                        {
+                            leaderboardB.Add((member.name, UnixTimeStampToDateTime(partResult2.get_star_ts)));
+                            leaderboardDelta.Add((member.name,
+                                partResult2.get_star_ts - partResult.get_star_ts));
+                            if (!mattStars.ContainsKey(member.name))
+                            {
+                                mattStars.Add(member.name, 0);
+                            }
+                        }
                     }
                 }
             }
 
             leaderboardA.Sort((a, b) => a.Time.CompareTo(b.Time));
             leaderboardB.Sort((a, b) => a.Time.CompareTo(b.Time));
+            leaderboardDelta.Sort((a, b) => a.Time.CompareTo(b.Time));
 
             if (leaderboardA.Any())
             {
                 System.Console.WriteLine($"\nResults for Day {day} part 1\n");
                 Console.WriteLine("|Name| Time (AWST)|");
                 Console.WriteLine("|------------|-----------------|");
+                int points = numberPeople;
                 foreach (var member in leaderboardA)
                 {
                     // System.Console.WriteLine($"{member.Name}\t\t{member.Time}");
                     Console.WriteLine("|{0,-20}|{1,10}|",
                         member.Name,
                         member.Time);
+                    actualStars[member.Name] += points;
+                    points--;
                 }
             }
             Console.WriteLine("\n  ");
 
-            if (leaderboardA.Any())
+            if (leaderboardB.Any())
             {
                 System.Console.WriteLine($"\nResults for Day {day} part 2\n");
                 
                 Console.WriteLine("|Name| Time (AWST)|");
                 Console.WriteLine("|------------|-----------------|");
+                int points = numberPeople;
                 foreach (var member in leaderboardB)
                 {
                     // System.Console.WriteLine($"{member.Name}\t\t{member.Time}");
                     Console.WriteLine("|{0,-20}|{1,10}|",
                         member.Name,
                         member.Time);
+                    actualStars[member.Name] += points;
+                    points--;
+                }
+                Console.WriteLine("\n  ");
+            }
+            
+            if (leaderboardDelta.Any())
+            {
+                System.Console.WriteLine($"\nResults for Day {day} fastest part 2\n");
+                
+                Console.WriteLine("|Name| Time (AWST)|");
+                Console.WriteLine("|------------|-----------------|");
+                int points = numberPeople;
+                foreach (var member in leaderboardDelta)
+                {
+                    // System.Console.WriteLine($"{member.Name}\t\t{member.Time}");
+                    Console.WriteLine("|{0,-20}|{1,10}|",
+                        member.Name,
+                        member.Time);
+                    
+                    mattStars[member.Name] += points;
+                    points--;
                 }
                 Console.WriteLine("\n  ");
             }
@@ -79,5 +121,34 @@ class Program
                 return dateTime;
             }
         }
+        var overallResults = actualStars.OrderByDescending(kvp => kvp.Value);
+        System.Console.WriteLine($"Overall Leaderboard\n");
+                
+        Console.WriteLine("|Name| Time (AWST)|");
+        Console.WriteLine("|------------|-----------------|");
+        foreach (var member in overallResults)
+        {
+            // System.Console.WriteLine($"{member.Name}\t\t{member.Time}");
+            Console.WriteLine("|{0,-20}|{1,10}|",
+                member.Key,
+                member.Value);
+                    
+        }
+        Console.WriteLine("\n  ");
+        
+        var overallMattStars = mattStars.OrderByDescending(kvp => kvp.Value);
+        System.Console.WriteLine($"Matt's Leaderboard - fastest by part 2\n");
+                
+        Console.WriteLine("|Name| Time (AWST)|");
+        Console.WriteLine("|------------|-----------------|");
+        foreach (var member in overallMattStars)
+        {
+            // System.Console.WriteLine($"{member.Name}\t\t{member.Time}");
+            Console.WriteLine("|{0,-20}|{1,10}|",
+                member.Key,
+                member.Value);
+                    
+        }
+        Console.WriteLine("\n  ");
     }
 }
