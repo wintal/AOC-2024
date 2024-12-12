@@ -18,4 +18,17 @@ public static class MathUtils
     {
         return a * b / GreatestCommonDivisor(a, b);
     }
+    
+    public static int NumDigits(long number)
+    {
+        return (int)Math.Floor(Math.Log10(number));
+    }
+
+    public static (long, long) SplitNumber(long number, int numdigits)
+    {
+        int multiplier = (int)Math.Pow(10, numdigits / 2);
+        long left = number / multiplier;
+        long right = number % multiplier;
+        return (left, right);
+    }
 }

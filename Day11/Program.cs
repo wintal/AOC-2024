@@ -24,7 +24,8 @@ class Program
 
         var map = Map.LoadFromLines(lines);
 
-        var stones = new List<long>(lines[0].Split(" ", StringSplitOptions.RemoveEmptyEntries| StringSplitOptions.TrimEntries).Select(long.Parse));
+        var stones = new List<long>(lines[0]
+            .Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Select(long.Parse));
 
 
         for (int i = 0; i < 25; i++)
@@ -41,17 +42,17 @@ class Program
         var count = stones.Count;
         for (int i = 0; i < count; i++)
         {
-            var numdigits = NumDigits(stones[i]);
+            var numdigits = MathUtils.NumDigits(stones[i]);
             if (stones[i] == 0)
             {
                 stones[i] = 1;
-            } 
-            else if ( numdigits % 2 == 0)
+            }
+            else if (numdigits % 2 == 0)
             {
                 long right = 0;
                 long left = stones[i];
                 int multiplier = 1;
-                for (int j = 0; j < numdigits/2; j++)
+                for (int j = 0; j < numdigits / 2; j++)
                 {
                     right = right + left % 10 * multiplier;
                     multiplier *= 10;
@@ -65,85 +66,57 @@ class Program
             {
                 stones[i] *= 2024;
             }
-        } 
+        }
     }
 
-    private static int NumDigits(long stone)
-    {
-        int digitCount = 0;
-        while (stone != 0)
-        {
-            stone = stone/10;
-            digitCount++;
-        }
-        return digitCount;
-    }
 
     static void RunPart2(string inputFile)
     {
-        var start = DateTime.Now;
         long result = 0;
         var lines = System.IO.File.ReadAllLines(inputFile);
 
-        var stones = new List<long>(lines[0].Split(" ", StringSplitOptions.RemoveEmptyEntries| StringSplitOptions.TrimEntries).Select(long.Parse));
+        var start = DateTime.Now;
+        var stones = new List<long>(lines[0]
+            .Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Select(long.Parse));
 
         Dictionary<(long, int), long> cache = new Dictionary<(long, int), long>();
         foreach (var entry in stones)
         {
-            var list = new List<long>();
-            list.Add(entry);
-            result += BlinkCached(list, 75, cache);
+            result += BlinkCached(entry, 75, cache);
         }
 
         System.Console.WriteLine($"Result {inputFile} is {result} in {(DateTime.Now - start).TotalSeconds} seconds");
     }
 
-    private static long BlinkCached(List<long> path, int depthLeft, Dictionary<(long, int), long> cache)
+    private static long BlinkCached(long thisValue, int depthLeft, Dictionary<(long, int), long> cache)
     {
         if (depthLeft == 0) return 1;
 
-        long thisValue = path.Last();
         if (cache.TryGetValue((thisValue, depthLeft), out long value))
         {
             return value;
         }
-        var numdigits = NumDigits(thisValue);
-        
+
+        var numdigits = MathUtils.NumDigits(thisValue);
+
         if (thisValue == 0)
         {
-            path.Add(1);
-            long downStream = BlinkCached(path, depthLeft - 1, cache);
-            path.RemoveAt(path.Count - 1);
+            long downStream = BlinkCached(1, depthLeft - 1, cache);
             cache[(thisValue, depthLeft)] = downStream;
             return downStream;
         }
         else if (numdigits % 2 == 0)
         {
-            long right = 0;
-            long left = thisValue;
-            int multiplier = 1;
-            for (int j = 0; j < numdigits / 2; j++)
-            {
-                right = right + left % 10 * multiplier;
-                multiplier *= 10;
-                left = left / 10;
-            }
+            var (left, right) = MathUtils.SplitNumber(thisValue, numdigits);
+            long downStreamLeft = BlinkCached(left, depthLeft - 1, cache);
 
-            path.Add(left);
-            long downStreamLeft = BlinkCached(path, depthLeft - 1, cache);
-
-            path.RemoveAt(path.Count - 1);
-            path.Add(right);
-            long downStreamRight = BlinkCached(path, depthLeft - 1, cache);
-            path.RemoveAt(path.Count - 1);
+            long downStreamRight = BlinkCached(right, depthLeft - 1, cache);
             cache[(thisValue, depthLeft)] = downStreamLeft + downStreamRight;
             return downStreamLeft + downStreamRight;
         }
         else
         {
-            path.Add(thisValue * 2024);
-            long downStream = BlinkCached(path, depthLeft - 1, cache);
-            path.RemoveAt(path.Count - 1);
+            long downStream = BlinkCached(thisValue * 2024, depthLeft - 1, cache);
             cache[(thisValue, depthLeft)] = downStream;
             return downStream;
         }

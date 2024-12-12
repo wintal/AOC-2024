@@ -74,7 +74,6 @@ class Program
 
         startIndex = 0;
         result = 0;
-        int highestIndex;
         for (int i = 0; i < array.Count; i++)
         {
             if (array[i] != -1)
