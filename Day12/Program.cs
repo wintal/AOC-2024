@@ -9,9 +9,9 @@ class Program
 
     static void Main(string[] args)
     {
-        /*RunPart1(Sample);
+        RunPart1(Sample);
         RunPart1(Input);
-        RunPart2(Sample);*/
+        RunPart2(Sample);
         RunPart2(Input);
     }
 
@@ -36,12 +36,14 @@ class Program
         foreach (var crop in cropTypes)
         {
             HashSet<Vector> used = new HashSet<Vector>();
-            foreach (var vector in map.FindNotUsed(crop, used))
+            var startV = map.FindNotUsed(crop, used);
+            while (startV.HasValue)
             {
                 HashSet<Vector> area = new HashSet<Vector>();
-                area = FollowArea(map, vector, area, used);
+                area = FollowArea(map, startV.Value, area, used);
                 var perimeter = GetPerimeter(area);
                 result += perimeter * area.Count;
+                startV = map.FindNotUsed(crop, used);
             }
         }
 
@@ -73,7 +75,7 @@ class Program
         foreach (var dir in new Vector[] { Vector.Up, Vector.Down, Vector.Left, Vector.Right })
         {
             var location = start + dir;
-            if (map.Contains(location)  && map[location] == map[start] && !used.Contains(location))
+            if (map.Contains(location) && !used.Contains(location) && map[location] == map[start])
             {
                 FollowArea(map, location, area, used);
             }
@@ -84,11 +86,11 @@ class Program
 
     static void RunPart2(string inputFile)
     {
+        var start = DateTime.Now;
         long result = 0;
 
         var lines = System.IO.File.ReadAllLines(inputFile);
 
-        var start = DateTime.Now;
         var map = Map.LoadFromLines(lines);
 
         HashSet<char> cropTypes = new HashSet<char>();
@@ -103,19 +105,82 @@ class Program
         foreach (var crop in cropTypes)
         {
             HashSet<Vector> used = new HashSet<Vector>();
-            
-            foreach (var vector in map.FindNotUsed(crop, used))
+            var startV = map.FindNotUsed(crop, used);
+            while (startV.HasValue)
             {
                 HashSet<Vector> area = new HashSet<Vector>();
-                area = FollowArea(map, vector, area, used);
-                var perimeter = GetCorners(area);
-                result += perimeter * area.Count;
+                area = FollowArea(map, startV.Value, area, used);
+                var corners = GetCorners(area);
+                result += corners * area.Count;
+                startV = map.FindNotUsed(crop, used);
             }
-          
         }
 
         System.Console.WriteLine($"Result {inputFile} is {result} in {(DateTime.Now - start).TotalSeconds} seconds");
     }
+
+    /*private static int GetNumberStraightSides(Map map, HashSet<Vector> area)
+    {
+        int perimeter = 0;
+        HashSet<(Vector, Vector)> edges = new HashSet<(Vector, Vector)>();
+        foreach (var v in area)
+        {
+            foreach (var dir in new Vector[] {  Vector.Left, Vector.Right,  Vector.Up, Vector.Down })
+            {
+                var location = v  + dir;
+                if (!area.Contains(location))
+                {
+                    edges.Add((v, dir));
+                }
+            }
+        }
+
+        foreach (var dir in new Vector[] {  Vector.Up, Vector.Down })
+        {
+            for (int y = 0 ; y < map.MaxY; y++)
+            {
+                int lastHitX = -3;
+                int lastHitY = -3;
+                for (int x = 0 ; x < map.MaxX; x++)
+                {
+                    if (edges.Contains((new Vector(x, y), dir)))
+                    {
+                        if (lastHitX != x - 1 || lastHitY != y)
+                        {
+                            perimeter++;
+                        }
+
+                        lastHitX = x;
+                        lastHitY = y;
+
+                    }
+                }
+            }
+        }
+
+        foreach (var dir in new Vector[] {  Vector.Left, Vector.Right })
+        {
+            for (int x = 0; x < map.MaxX ; x++)
+            {
+                int lastHitY = -2;
+                int lastHitX = -2;
+                for (int y = 0 ; y < map.MaxY; y++)
+                {
+                    if (edges.Contains((new Vector(x, y), dir)))
+                    {
+                        if (lastHitY != y - 1 || lastHitX != x)
+                        {
+                            perimeter++;
+                        }
+                        lastHitY = y;
+                        lastHitX = x;
+                    }
+                }
+            }
+        }
+
+        return perimeter;
+    }*/
 
     private static int GetCorners(HashSet<Vector> area)
     {
@@ -130,7 +195,7 @@ class Program
                      })
             {
                 var location = v + dir;
-                emptyEdges <<= 1;
+                emptyEdges = emptyEdges << 1;
                 if (!area.Contains(location))
                 {
                     emptyEdges += 1;
@@ -139,15 +204,15 @@ class Program
 
             for (int i = 0; i < 4; i++)
             {
-                var theseEdges = emptyEdges & 5;
+                var theseEdges = emptyEdges & 7;
                 switch (theseEdges)
                 {
-                    case 0 or 2 or 5:
+                    case 7 or 2 or 5:
                         corners += 1;
                         break;
                 }
 
-                emptyEdges >>= 2;
+                emptyEdges = emptyEdges >> 2;
             }
         }
 

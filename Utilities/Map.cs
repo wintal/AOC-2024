@@ -78,7 +78,7 @@ public class Map
         Console.WriteLine();
     }
 
-    public IEnumerable<Vector> FindNotUsed(char crop, HashSet<Vector> used)
+    public Vector? FindNotUsed(char crop, HashSet<Vector> used)
     {
         for (int y = 0; y < MaxY; y++)
         {
@@ -88,9 +88,11 @@ public class Map
                 if (!used.Contains(pos) && this[pos] == crop)
                 {
 
-                    yield return pos;
+                    return pos;
                 }
             }
         }
+
+        return null;
     }
 }
