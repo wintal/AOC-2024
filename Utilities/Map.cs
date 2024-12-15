@@ -95,4 +95,19 @@ public class Map
 
         return null;
     }
+    
+    public static void Print2DArray<T>(T[,] matrix)
+    {
+        int rows = matrix.GetLength(0); // 0 is first dimension, 1 is 2nd 
+        //dimension of 2d array 
+        int cols = matrix.GetLength(1);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                Console.Write(matrix[i, j]);
+            }
+            Console.Write('\n');
+        }
+    }
 }

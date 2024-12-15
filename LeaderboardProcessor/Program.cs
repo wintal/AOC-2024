@@ -21,8 +21,8 @@ class Program
         {
             if (dayToReport.HasValue && dayToReport.Value != day) continue;
             
-            List<(string Name, DateTime Time)> leaderboardA = new List<(string Name, DateTime Time)>();
-            List<(string Name, DateTime Time)> leaderboardB = new List<(string Name, DateTime Time)>();
+            List<(string Name, (DateTime Time, long rank))> leaderboardA = new ();
+            List<(string Name, (DateTime Time, long rank))> leaderboardB = new ();
             List<(string Name, long Time)> leaderboardDelta = new List<(string Name, long Time)>();
 
             foreach (var member in data.members.Select(kvp => kvp.Value))
@@ -32,7 +32,7 @@ class Program
 
                     if (dayResult?.TryGetValue(1, out var partResult) ?? false)
                     {
-                        leaderboardA.Add((member.name, UnixTimeStampToDateTime(partResult.get_star_ts)));
+                        leaderboardA.Add((member.name, (UnixTimeStampToDateTime(partResult.get_star_ts), partResult.star_index)));
                         if (!actualStars.ContainsKey(member.name))
                         {
                             actualStars.Add(member.name, 0);
@@ -40,7 +40,7 @@ class Program
 
                         if (dayResult?.TryGetValue(2, out var partResult2) ?? false)
                         {
-                            leaderboardB.Add((member.name, UnixTimeStampToDateTime(partResult2.get_star_ts)));
+                            leaderboardB.Add((member.name, (UnixTimeStampToDateTime(partResult2.get_star_ts), partResult.star_index)));
                             leaderboardDelta.Add((member.name,
                                 partResult2.get_star_ts - partResult.get_star_ts));
                             if (!mattStars.ContainsKey(member.name))
@@ -52,8 +52,16 @@ class Program
                 }
             }
 
-            leaderboardA.Sort((a, b) => a.Time.CompareTo(b.Time));
-            leaderboardB.Sort((a, b) => a.Time.CompareTo(b.Time));
+            leaderboardA.Sort((a, b) =>
+            {
+                if (a.Item2.Time == b.Item2.Time) return -a.Item2.rank.CompareTo(b.Item2.rank);
+                return a.Item2.Time.CompareTo(b.Item2.Time);
+            });
+            leaderboardB.Sort((a, b) =>
+            {
+                if (a.Item2.Time == b.Item2.Time) return -a.Item2.rank.CompareTo(b.Item2.rank);
+                return a.Item2.Time.CompareTo(b.Item2.Time);
+            });
             leaderboardDelta.Sort((a, b) => a.Time.CompareTo(b.Time));
 
             if (leaderboardA.Any())
@@ -67,7 +75,7 @@ class Program
                     // System.Console.WriteLine($"{member.Name}\t\t{member.Time}");
                     Console.WriteLine("|{0,-20}|{1,10}|",
                         member.Name,
-                        member.Time);
+                        member.Item2.Time);
                     actualStars[member.Name] += points;
                     points--;
                 }
@@ -86,7 +94,7 @@ class Program
                     // System.Console.WriteLine($"{member.Name}\t\t{member.Time}");
                     Console.WriteLine("|{0,-20}|{1,10}|",
                         member.Name,
-                        member.Time);
+                        member.Item2.Time);
                     actualStars[member.Name] += points;
                     points--;
                 }
