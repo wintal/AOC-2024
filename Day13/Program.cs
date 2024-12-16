@@ -74,16 +74,13 @@ class Program
                     bestResult = Math.Min(bestResult, aM * 3 + bM1);
                 }
             }
-
-            if (bestResult == 290)
-            {
-            }
-
             if (bestResult != int.MaxValue)
             {
                 Console.WriteLine($"Answer is {bestResult}");
                 result += bestResult;
             }
+            
+           
         }
 
 
@@ -174,8 +171,12 @@ class Program
             {
                 Console.WriteLine($"No result");
             }
+            var solverResult = Day13Solver.FindWinnersPart2(problem.A.X, problem.A.Y, problem.B.X, problem.B.Y, problem.Result.X, problem.Result.Y);
+            if (solverResult.HasValue)
+            {
+                Console.WriteLine($"Solver Answer is {solverResult.Value.X * 3 + solverResult.Value.Y}");
+            }
         }
-
 
         System.Console.WriteLine($"Result {inputFile} is {result} in {(DateTime.Now - start).TotalSeconds} seconds");
     }

@@ -4,7 +4,7 @@ namespace Utilities;
 
 public static class Day13Solver
 {
-    public static Vector? FindWinnersPart2(long aX, long aY, int bX, int bY, long pX, long pY)
+    public static Vector? FindWinnersPart2(long aX, long aY, long bX, long bY, long pX, long pY)
     {
         List<Vector> results = new List<Vector>();
 
