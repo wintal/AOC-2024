@@ -2,7 +2,7 @@
 using Utilities;
 using Vector = Utilities.Vector;
 
-namespace Day1;
+namespace Day15;
 
 
 class Program

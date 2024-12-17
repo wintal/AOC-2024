@@ -27,7 +27,7 @@ public record struct Vector(long X, long Y)
         return new Vector(-Y, X);
     }
 
-    public Vector RotateLeft90(Vector v)
+    public Vector RotateLeft90()
     {
         return new Vector(Y, -X);
     }
