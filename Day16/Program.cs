@@ -27,7 +27,7 @@ class Program
 
         var map = Map.LoadFromLines(lines);
 
-        var startPos = map.FindNotUsed('S', new HashSet<Vector>());
+        var startPos = map.Find('S', new HashSet<Vector>());
 
         var actResult = FindCheapestPath(startPos.Value, map);
         System.Console.WriteLine(
@@ -109,8 +109,8 @@ class Program
 
         var map = Map.LoadFromLines(lines);
 
-        var startPos = map.FindNotUsed('S', new HashSet<Vector>());
-        var endPos = map.FindNotUsed('E', new HashSet<Vector>());
+        var startPos = map.Find('S', new HashSet<Vector>());
+        var endPos = map.Find('E', new HashSet<Vector>());
 
         var actResult = FindCheapestPath(startPos.Value, map);
         System.Console.WriteLine(

@@ -36,14 +36,14 @@ class Program
         foreach (var crop in cropTypes)
         {
             HashSet<Vector> used = new HashSet<Vector>();
-            var startV = map.FindNotUsed(crop, used);
+            var startV = map.Find(crop, used);
             while (startV.HasValue)
             {
                 HashSet<Vector> area = new HashSet<Vector>();
                 area = FollowArea(map, startV.Value, area, used);
                 var perimeter = GetPerimeter(area);
                 result += perimeter * area.Count;
-                startV = map.FindNotUsed(crop, used);
+                startV = map.Find(crop, used);
             }
         }
 
@@ -105,14 +105,14 @@ class Program
         foreach (var crop in cropTypes)
         {
             HashSet<Vector> used = new HashSet<Vector>();
-            var startV = map.FindNotUsed(crop, used);
+            var startV = map.Find(crop, used);
             while (startV.HasValue)
             {
                 HashSet<Vector> area = new HashSet<Vector>();
                 area = FollowArea(map, startV.Value, area, used);
                 var corners = GetCorners(area);
                 result += corners * area.Count;
-                startV = map.FindNotUsed(crop, used);
+                startV = map.Find(crop, used);
             }
         }
 

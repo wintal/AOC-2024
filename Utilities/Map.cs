@@ -78,16 +78,15 @@ public class Map
         Console.WriteLine();
     }
 
-    public Vector? FindNotUsed(char crop, HashSet<Vector> used)
+    public Vector? Find(char crop, HashSet<Vector> excluded)
     {
         for (int y = 0; y < MaxY; y++)
         {
             for (int x = 0; x < MaxX; x++)
             {
                 Vector pos = new Vector(x, y);
-                if (!used.Contains(pos) && this[pos] == crop)
+                if (!(excluded?.Contains(pos)??false) && this[pos] == crop)
                 {
-
                     return pos;
                 }
             }
