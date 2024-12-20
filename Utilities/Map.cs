@@ -46,6 +46,19 @@ public class Map
 
         return map;
     }
+    
+    public static Map Create(int width, int height)
+    {
+        var map = new Map();
+        map.Rows = new char[height][];
+        int row = 0;
+        for (int i = 0; i <  height; i++)
+        {
+            map.Rows[row++] = new char[width];
+        }
+
+        return map;
+    }
 
     public char this[Vector location]
     {

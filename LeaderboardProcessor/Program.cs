@@ -7,25 +7,31 @@ class Program
         var leaderBoardData = System.IO.File.ReadAllText(args[0]);
 
         var data = JsonConvert.DeserializeObject<Results>(leaderBoardData);
-        int? dayToReport = null;
-        if (args.Length > 1 && int.TryParse(args[1], out var dayId))
+        HashSet<string> allPlayers = new HashSet<string>();
+        if (args.Length > 1)
         {
-            dayToReport = dayId;
+            foreach (var arg in args[1..])
+            {
+                allPlayers.Add(arg);
+            }
         }
+        else
+        {
+            allPlayers = data.members.Select(p => p.Value.name).ToHashSet();
+        }
+        
 
         Dictionary<string, int> mattStars = new Dictionary<string, int>();
         Dictionary<string, int> actualStars = new Dictionary<string, int>();
 
-        int numberPeople = data.members.Count;
+        int numberPeople = data.members.Count(p => allPlayers.Contains(p.Value.name));
         for (int day = 1; day <= 25; day++)
         {
-            if (dayToReport.HasValue && dayToReport.Value != day) continue;
-            
             List<(string Name, (DateTime Time, long rank))> leaderboardA = new ();
             List<(string Name, (DateTime Time, long rank))> leaderboardB = new ();
             List<(string Name, long Time)> leaderboardDelta = new List<(string Name, long Time)>();
 
-            foreach (var member in data.members.Select(kvp => kvp.Value))
+            foreach (var member in data.members.Where(p => allPlayers.Contains(p.Value.name)).Select(kvp => kvp.Value))
             {
                 if (member.completion_day_level.TryGetValue(day, out var dayResult))
                 {
