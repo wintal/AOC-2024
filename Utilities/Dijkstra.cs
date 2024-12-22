@@ -3,64 +3,56 @@
 public static class Dijkstra
 {
     static (TCost, List<TPos>) FindCheapestPath<TCost, TPos, TState>(TState initialState,
-                                                        TCost initialCost,
-                                                        Func<TState, TCost> costFromState
-    )
+                                                                     TCost initialCost,
+                                                                     TCost maxCost,
+                                                                     Func<TState, bool> endState,
+                                                                     Func<TState, TCost, List<(TState state, TCost cost)>> getNeighbours
+    ) where TCost: IComparable
     {
         var queue = new PriorityQueue<TState, TCost>();
         queue.Enqueue(initialState, initialCost);
 
-        TCost? lowestScore = null;
+        TCost lowestScore = maxCost;
         var bestPaths = new List<IEnumerable<Vector>>();
-        var baseScores = new Dictionary<Vector, int>();
+        var baseScores = new Dictionary<TState, TCost>();
 
-        HashSet<Vector> visited = new HashSet<Vector>();
-        void Enqueue(TState state, int score)
+        HashSet<TState> visited = new HashSet<TState>();
+        void Enqueue(TState state, TCost score)
         {
-            visited.Add(position);
-            var currentScore = baseScores.GetValueOrDefault(position, int.MaxValue);
+            visited.Add(state);
+            var currentScore = baseScores.GetValueOrDefault(state, maxCost);
 
-            if (currentScore >= score)
+            if (currentScore.CompareTo(score) >= 0)
             {
-                baseScores[position] = score;
-                queue.Enqueue(position, score, score);
+                baseScores[state] = score;
+                queue.Enqueue(state, score);
             }
         }
 
         while (queue.TryDequeue(out TState element, out TCost priority))
         {
             var state = queue.Dequeue();
-            if (priority > lowestScore)
+            if (priority.CompareTo(lowestScore) > 0)
             {
                 continue;
             }
 
-            if (state.pos == end)
+            if (endState(state))
             {
-                if (state.score < lowestScore)
+                if (priority.CompareTo(lowestScore) > 0)
                 {
-                    lowestScore = state.score;
+                    lowestScore = priority;
                 }
 
                 continue;
             }
 
-            foreach (var dir in new[] { Vector.Left, Vector.Right, Vector.Up, Vector.Down })
+            foreach (var candidate in getNeighbours(state, priority))
             {
-                var candidate = state.pos + dir;
-                if (map.Contains(candidate) && map[candidate] != '#' && !visited.Contains(candidate))
-                {
-                    Enqueue(candidate, Vector.Right, state.score + 1);
-                }
+                Enqueue(candidate.state, candidate.cost);
             }
+             
         }  
-        foreach (var path in bestPaths)
-        {
-            foreach (var pos in path)
-            {
-                visited.Add(pos);
-            }
-        }
 
         return (lowestScore, visited.Count);
 

@@ -1,7 +1,8 @@
 ﻿namespace Utilities;
 
-public record struct Vector(long X, long Y)
+public readonly record struct Vector(long X, long Y)
 {
+    
     public static readonly Vector Zero = new(0, 0);
     public static readonly Vector Up = new(0, -1);
     public static readonly Vector UpLeft = new(-1, -1);
